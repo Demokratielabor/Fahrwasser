@@ -1,0 +1,104 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:10.1-alpine
+    env_file: .env
+    restart: always
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./liquidfeedback/sql:/docker-entrypoint-initdb.d:ro
+
+  lqfb:
+    build: liquidfeedback
+    env_file: .env
+    restart: always
+    depends_on:
+      - postgres
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 127.0.0.1:2812:2812
+
+
+#   prometheus:
+#     image: prom/prometheus:v2.0.0
+#     labels:
+#       com.centurylinklabs.watchtower.enable: "true"
+#     volumes:
+#       - /etc/localtime:/etc/localtime:ro
+#       - ./prometheus/:/etc/prometheus/:ro
+#       - prometheus_data:/prometheus
+#     command:
+#       - '--config.file=/etc/prometheus/prometheus.yml'
+#       - '--storage.tsdb.path=/prometheus'
+#       - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+#       - '--web.console.templates=/usr/share/prometheus/consoles'
+#     ports:
+#       - 127.0.0.1:9090:9090
+#     depends_on:
+#       - cadvisor
+#     restart: always
+
+#   node-exporter:
+#     image: prom/node-exporter
+#     labels:
+#       com.centurylinklabs.watchtower.enable: "true"
+#     volumes:
+#       - /etc/localtime:/etc/localtime:ro
+#       - /proc:/host/proc:ro
+#       - /sys:/host/sys:ro
+#       - /:/rootfs:ro
+#     command: 
+#       - '--path.procfs=/host/proc' 
+#       - '--path.sysfs=/host/sys'
+#       - --collector.filesystem.ignored-mount-points
+#       - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+#     ports:
+#       - 127.0.0.1:9100:9100
+#     restart: always
+
+#   cadvisor:
+#     image: google/cadvisor
+#     labels:
+#       com.centurylinklabs.watchtower.enable: "true"
+#     volumes:
+#       - /etc/localtime:/etc/localtime:ro
+#       - /:/rootfs:ro
+#       - /var/run:/var/run:rw
+#       - /sys:/sys:ro
+#       - /var/lib/docker/:/var/lib/docker:ro
+#     ports:
+#       - 127.0.0.1:8080:8080
+#     restart: always
+
+#   grafana:
+#     image: grafana/grafana
+#     labels:
+#       com.centurylinklabs.watchtower.enable: "true"
+#     depends_on:
+#       - prometheus
+#     ports:
+#       - 127.0.0.1:3000:3000
+#     volumes:
+#       - /etc/localtime:/etc/localtime:ro
+#       - grafana_data:/var/lib/grafana
+#     env_file:
+#       - .env
+#     restart: always
+
+#   watchtower:
+#     image: v2tec/watchtower
+#     labels:
+#       com.centurylinklabs.watchtower.enable: "true"
+#     volumes:
+#       - /etc/localtime:/etc/localtime:ro
+#       - /var/run/docker.sock:/var/run/docker.sock
+#       - /root/.docker/config.json:/config.json
+#     command: --label-enable
+#     restart: always
+
+
+# volumes:
+#   prometheus_data: {}
+#   grafana_data: {}
