@@ -9,12 +9,22 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ./liquidfeedback/sql:/docker-entrypoint-initdb.d:ro
 
-  lqfb:
-    build: liquidfeedback
+  lqfb-core:
+    build: liquidfeedback/core
     env_file: .env
     restart: always
     depends_on:
       - postgres
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+
+  lqfb-frontend:
+    build: liquidfeedback/frontend
+    env_file: .env
+    restart: always
+    depends_on:
+      - postgres
+      - lqfb-core
     volumes:
       - /etc/localtime:/etc/localtime:ro
     ports:

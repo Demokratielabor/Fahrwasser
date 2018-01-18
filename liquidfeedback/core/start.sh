@@ -1,8 +1,6 @@
 #!/bin/sh
 
-/opt/moonbridge/moonbridge /opt/webmcp/bin/mcp.lua /opt/webmcp/ /opt/liquid_feedback_frontend/ main custom &
-
-PIDFILE="/var/run/lf_updated.pid"
+PIDFILE="/tmp/lf_updated.pid"
 PID=$$
 
 if [ -f "${PIDFILE}" ] && kill -CONT $( cat "${PIDFILE}" ); then
