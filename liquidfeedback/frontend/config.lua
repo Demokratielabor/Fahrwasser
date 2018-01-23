@@ -324,11 +324,11 @@ config.port = 2812
 -- uncomment the following line to use C implementations of chosen
 -- functions:
 -- ------------------------------------------------------------------------
-require 'webmcp_accelerator'
+-- require 'webmcp_accelerator'
 
 
 -- Trace debug
 -- ------------------------------------------------------------------------
 -- uncomment the following line to enable debug trace
 -- ------------------------------------------------------------------------
--- config.enable_debug_trace = true
+config.enable_debug_trace = true
