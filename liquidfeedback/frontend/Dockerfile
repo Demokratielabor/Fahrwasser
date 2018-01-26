@@ -11,7 +11,7 @@ ENV LQFB_FRONTEND_VERSION 3.2.1
 ENV LANG C.UTF-8
 
 RUN apt-get update && \
-	apt-get -y install \
+	apt-get -y install --no-install-recommends \
 		curl \
 		build-essential \
 		bmake \
@@ -22,6 +22,7 @@ RUN apt-get update && \
 		libbsd-dev \
 		imagemagick \
 		ssmtp \
+		python3-setuptools \
 		python3-pip && \
 	pip3 --no-cache-dir install markdown2 && \
 	curl -sSL http://www.public-software-group.org/pub/projects/moonbridge/v${LQFB_MOONBRIDGE_VERSION}/moonbridge-v${LQFB_MOONBRIDGE_VERSION}.tar.gz | tar xzC /tmp && \
