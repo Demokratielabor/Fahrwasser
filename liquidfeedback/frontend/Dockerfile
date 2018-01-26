@@ -28,7 +28,7 @@ RUN apt-get update && \
 	curl -sSL http://www.public-software-group.org/pub/projects/moonbridge/v${LQFB_MOONBRIDGE_VERSION}/moonbridge-v${LQFB_MOONBRIDGE_VERSION}.tar.gz | tar xzC /tmp && \
 	cd /tmp/moonbridge-v${LQFB_MOONBRIDGE_VERSION} && \
 	bmake -j $(nproc) MOONBR_LUA_PATH=/opt/moonbridge/?.lua && \
-	mkdir /opt/moonbridge && \
+	mkdir -p /opt/moonbridge && \
 	cp moonbridge moonbridge_http.lua /opt/moonbridge/ && \
 	rm -rf /tmp/moonbridge-v${LQFB_MOONBRIDGE_VERSION} && \
 	curl -sSL http://www.public-software-group.org/pub/projects/webmcp/v${LQFB_WEBMCP_VERSION}/webmcp-v${LQFB_WEBMCP_VERSION}.tar.gz | tar xzC /tmp && \
@@ -39,7 +39,7 @@ RUN apt-get update && \
 		-e "s,5.2,5.3," \
 		-e "s,52,53," && \
 	make && \
-	mkdir /opt/webmcp && \
+	mkdir -p /opt/webmcp && \
 	cp -RL framework/* /opt/webmcp/ && \
 	rm -rf /tmp/webmcp-v${LQFB_WEBMCP_VERSION} && \
 	curl -sSL http://www.public-software-group.org/pub/projects/liquid_feedback/frontend/v${LQFB_FRONTEND_VERSION}/liquid_feedback_frontend-v${LQFB_FRONTEND_VERSION}.tar.gz | tar xzC /tmp && \
