@@ -6,6 +6,7 @@ HEALTHCHECK CMD curl -f -L http://localhost:2812/ || exit 1
 
 ENV LQFB_MOONBRIDGE_VERSION 1.0.2
 ENV LQFB_WEBMCP_VERSION 2.1.0
+ENV LQFB_ROCKETWIKI_VERSION 0.4
 ENV LQFB_FRONTEND_VERSION 3.2.1
 
 ENV LANG C.UTF-8
@@ -49,6 +50,13 @@ RUN curl -sSL http://www.public-software-group.org/pub/projects/webmcp/v${LQFB_W
 	cp -RL framework/* /opt/webmcp/ && \
 	rm -rf /tmp/webmcp-v${LQFB_WEBMCP_VERSION}
 
+RUN curl -sSL http://www.public-software-group.org/pub/projects/rocketwiki/liquid_feedback_edition/v${LQFB_ROCKETWIKI_VERSION}/rocketwiki-lqfb-v${LQFB_ROCKETWIKI_VERSION}.tar.gz | tar xzC /tmp && \
+	cd /tmp/rocketwiki-lqfb-v${LQFB_ROCKETWIKI_VERSION} && \
+	make && \
+	mkdir -p /opt/rocketwiki-lqfb && \
+	cp rocketwiki-lqfb rocketwiki-lqfb-compat /opt/rocketwiki-lqfb && \
+	rm -rf /tmp/rocketwiki-lqfb-v${LQFB_ROCKETWIKI_VERSION}
+
 RUN curl -sSL http://www.public-software-group.org/pub/projects/liquid_feedback/frontend/v${LQFB_FRONTEND_VERSION}/liquid_feedback_frontend-v${LQFB_FRONTEND_VERSION}.tar.gz | tar xzC /tmp && \
 	cp -a /tmp/liquid_feedback_frontend-v${LQFB_FRONTEND_VERSION} /opt/liquid_feedback_frontend && \
 	rm -rf /tmp/liquid_feedback_frontend-v${LQFB_FRONTEND_VERSION}}
@@ -56,7 +64,9 @@ RUN curl -sSL http://www.public-software-group.org/pub/projects/liquid_feedback/
 RUN apt-get -y purge \
 		build-essential \
 		bmake \
-		lsb-release && \
+		ghc \
+		lsb-release \
+		rsync && \
 	apt-get -y autoremove --purge && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/*
