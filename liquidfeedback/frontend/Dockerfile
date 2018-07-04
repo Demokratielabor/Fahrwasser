@@ -14,18 +14,20 @@ VOLUME [ "/opt/liquid_feedback_frontend/config" ]
 
 RUN apt-get update && \
 	apt-get -y install --no-install-recommends \
-		curl \
-		build-essential \
 		bmake \
+		build-essential \
+		curl \
+		ghc \
+		imagemagick \
+		libbsd-dev \
+		libghc-parsec3-dev \
+		liblua5.3-dev \
 		lsb-release \
 		lua5.3 \
-		liblua5.3-dev \
 		postgresql-server-dev-all \
-		libbsd-dev \
-		imagemagick \
-		# ssmtp \
+		python3-pip \
 		python3-setuptools \
-		python3-pip && \
+		rsync && \
 	pip3 --no-cache-dir install markdown2
 
 RUN curl -sSL http://www.public-software-group.org/pub/projects/moonbridge/v${LQFB_MOONBRIDGE_VERSION}/moonbridge-v${LQFB_MOONBRIDGE_VERSION}.tar.gz | tar xzC /tmp && \
