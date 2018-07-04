@@ -21,6 +21,6 @@ RUN apk del --no-cache \
 		build-base \
 		curl
 
-COPY start.sh /
+COPY entrypoint.sh /entrypoint.sh
 
-CMD "/start.sh"
+CMD "/entrypoint.sh"

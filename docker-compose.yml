@@ -16,14 +16,22 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - postgres_data:/var/lib/postgresql/data
-      # - ./custom-sql:/docker-entrypoint-initdb.d:ro
+
+  pgbouncer:
+    build: pgbouncer
+    env_file: .env
+    restart: always
+    depends_on:
+      - postgres
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
 
   lqfb-core:
     build: liquidfeedback/core
     env_file: .env
     restart: always
     depends_on:
-      - postgres
+      - pgbouncer
     volumes:
       - /etc/localtime:/etc/localtime:ro
 
@@ -39,15 +47,29 @@ services:
     ports:
       - 127.0.0.1:2812:2812
 
-#   watchtower:
-#     image: v2tec/watchtower
-#     labels:
-#       com.centurylinklabs.watchtower.enable: "true"
-#     volumes:
-#       - /etc/localtime:/etc/localtime:ro
-#       - /var/run/docker.sock:/var/run/docker.sock
-#     command: --label-enable
-#     restart: always
+  adminer:
+    image: adminer
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    env_file: .env
+    restart: always
+    depends_on:
+      - postgres
+      - pgbouncer
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 127.0.0.1:8080:8080
+
+  # watchtower:
+  #   image: v2tec/watchtower
+  #   labels:
+  #     com.centurylinklabs.watchtower.enable: "true"
+  #   volumes:
+  #     - /etc/localtime:/etc/localtime:ro
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   command: --label-enable
+  #   restart: always
 
 #   prometheus:
 #     image: prom/prometheus:v2.0.0
@@ -67,6 +89,7 @@ services:
 #     depends_on:
 #       - cadvisor
 #     restart: always
+
 #   node-exporter:
 #     image: prom/node-exporter
 #     labels:
@@ -84,6 +107,7 @@ services:
 #     ports:
 #       - 127.0.0.1:9100:9100
 #     restart: always
+
 #   cadvisor:
 #     image: google/cadvisor
 #     labels:
@@ -97,6 +121,7 @@ services:
 #     ports:
 #       - 127.0.0.1:8080:8080
 #     restart: always
+
 #   grafana:
 #     image: grafana/grafana
 #     labels:

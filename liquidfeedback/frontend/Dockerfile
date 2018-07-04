@@ -48,7 +48,8 @@ RUN curl -sSL http://www.public-software-group.org/pub/projects/webmcp/v${LQFB_W
 	rm -rf /tmp/webmcp-v${LQFB_WEBMCP_VERSION}
 
 RUN curl -sSL http://www.public-software-group.org/pub/projects/liquid_feedback/frontend/v${LQFB_FRONTEND_VERSION}/liquid_feedback_frontend-v${LQFB_FRONTEND_VERSION}.tar.gz | tar xzC /tmp && \
-	cp -a /tmp/liquid_feedback_frontend-v${LQFB_FRONTEND_VERSION} /opt/liquid_feedback_frontend
+	cp -a /tmp/liquid_feedback_frontend-v${LQFB_FRONTEND_VERSION} /opt/liquid_feedback_frontend && \
+	rm -rf /tmp/liquid_feedback_frontend-v${LQFB_FRONTEND_VERSION}}
 
 RUN apt-get -y purge \
 		build-essential \
