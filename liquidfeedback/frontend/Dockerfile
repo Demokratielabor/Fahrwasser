@@ -58,7 +58,7 @@ RUN curl -sSL http://www.public-software-group.org/pub/projects/rocketwiki/liqui
 	rm -rf /tmp/rocketwiki-lqfb-v${LQFB_ROCKETWIKI_VERSION}
 
 RUN curl -sSL http://www.public-software-group.org/pub/projects/liquid_feedback/frontend/v${LQFB_FRONTEND_VERSION}/liquid_feedback_frontend-v${LQFB_FRONTEND_VERSION}.tar.gz | tar xzC /tmp && \
-	cp -a /tmp/liquid_feedback_frontend-v${LQFB_FRONTEND_VERSION} /opt/liquid_feedback_frontend && \
+	rsync -a /tmp/liquid_feedback_frontend-v${LQFB_FRONTEND_VERSION}/ /opt/liquid_feedback_frontend/. && \
 	rm -rf /tmp/liquid_feedback_frontend-v${LQFB_FRONTEND_VERSION}}
 
 RUN apt-get -y purge \
@@ -71,9 +71,11 @@ RUN apt-get -y purge \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/*
 
-COPY init.lua /opt/liquid_feedback_frontend/config/init.lua
-COPY config.lua /opt/liquid_feedback_frontend/config/config.lua
+COPY init.template.lua /init.template.lua
+COPY custom_config.lua /opt/liquid_feedback_frontend/config/custom_config.lua
 
-CMD [ "/opt/moonbridge/moonbridge", "/opt/webmcp/bin/mcp.lua", "/opt/webmcp/", "/opt/liquid_feedback_frontend/", "main", "config" ]
+COPY entrypoint.sh /entrypoint.sh
+
+CMD "/entrypoint.sh"
 
 EXPOSE 2812
