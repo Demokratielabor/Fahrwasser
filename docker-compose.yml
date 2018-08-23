@@ -29,6 +29,7 @@ services:
     env_file: .env
     restart: always
     depends_on:
+      - postgres
       - pgbouncer
     volumes:
       - /etc/localtime:/etc/localtime:ro
@@ -38,6 +39,8 @@ services:
     env_file: .env
     restart: always
     depends_on:
+      - postgres
+      - pgbouncer
       - lqfb-core
     volumes:
       - /etc/localtime:/etc/localtime:ro
