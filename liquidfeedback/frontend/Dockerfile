@@ -13,6 +13,8 @@ ENV LANG C.UTF-8
 
 VOLUME [ "/opt/liquid_feedback_frontend/config" ]
 
+COPY patches /patches
+
 RUN apt-get update && \
 	apt-get -y install --no-install-recommends \
 		bmake \
@@ -25,6 +27,7 @@ RUN apt-get update && \
 		liblua5.3-dev \
 		lsb-release \
 		lua5.3 \
+		patch \
 		postgresql-server-dev-all \
 		python3-pip \
 		python3-setuptools \
@@ -39,11 +42,7 @@ RUN apt-get update && \
 	# install webmcp
 	curl -sSL http://www.public-software-group.org/pub/projects/webmcp/v${LQFB_WEBMCP_VERSION}/webmcp-v${LQFB_WEBMCP_VERSION}.tar.gz | tar xzC /tmp && \
 	cd /tmp/webmcp-v${LQFB_WEBMCP_VERSION} && \
-	sed -i Makefile.options \
-		-e "s,LUA_BIN = lua,LUA_BIN = lua5.3," \
-		-e "s,LUAC_BIN = luac,LUAC_BIN = luac5.3," \
-		-e "s,5.2,5.3," \
-		-e "s,52,53," && \
+	patch -p1 < /patches/webmcp/0001-use-lua5.3.patch && \
 	make && \
 	mkdir -p /opt/webmcp && \
 	cp -RL framework/* /opt/webmcp/ && \
@@ -62,6 +61,7 @@ RUN apt-get update && \
 		bmake \
 		ghc \
 		lsb-release \
+		patch \
 		rsync && \
 	apt-get -y autoremove --purge && \
 	apt-get clean && \
