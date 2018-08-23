@@ -7,7 +7,7 @@ execute.config("custom_config")
 
 config.database = {
   engine='postgresql',
-  host='pgbouncer',
+  host='__POSTGRES_HOST__',
   user='__POSTGRES_USER__',
   password='__POSTGRES_PASSWORD__',
   dbname='__POSTGRES_DB__'
