@@ -36,7 +36,7 @@ config.use_terms_checkboxes = {
 config.absolute_base_url = "http://localhost:2812/"
 
 
--- Location of the rocketwiki binaries
+-- Location of the formatting engines binaries
 -- ------------------------------------------------------------------------
 config.formatting_engines = {
   { id = "markdown2",
