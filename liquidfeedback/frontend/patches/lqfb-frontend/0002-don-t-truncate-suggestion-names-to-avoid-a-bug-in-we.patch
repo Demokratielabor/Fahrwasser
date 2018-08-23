@@ -1,0 +1,45 @@
+From 41ea85fd22adf45308fc31a043581bf0ea8f2629 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Thomas=20S=C3=A4nger?= <thomas@gecko.space>
+Date: Thu, 23 Aug 2018 15:39:06 +0200
+Subject: [PATCH 2/2] don't truncate suggestion-names to avoid a bug in webmcp
+ format.string()
+
+---
+ app/main/initiative/show.lua | 5 ++---
+ app/main/issue/_list2.lua    | 4 +---
+ 2 files changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/app/main/initiative/show.lua b/app/main/initiative/show.lua
+index 72e8382..37ec5c7 100755
+--- a/app/main/initiative/show.lua
++++ b/app/main/initiative/show.lua
+@@ -265,9 +265,8 @@ ui.container {
+           ui.link { attr = { name = "s" .. suggestion.id }, text = "" }
+           ui.heading { level = 2, 
+             attr = { class = "suggestionHead" },
+-            content = format.string(suggestion.name, {
+-            truncate_at = 160, truncate_suffix = true
+-          }) }
++            content = suggestion.name
++          }
+   
+ 
+             local plus2  = (suggestion.plus2_unfulfilled_count or 0)
+diff --git a/app/main/issue/_list2.lua b/app/main/issue/_list2.lua
+index 02b9711..a3d2cfe 100644
+--- a/app/main/issue/_list2.lua
++++ b/app/main/issue/_list2.lua
+@@ -269,9 +269,7 @@ local function doit()
+         if event.suggestion_id then
+           ui.container{ attr = { class = "suggestion" }, content = function()
+             ui.link{
+-              text = format.string(event.suggestion.name, {
+-                truncate_at = 160, truncate_suffix = true
+-              }),
++              text = event.suggestion.name,
+               module = "initiative", view = "show", id = event.initiative.id,
+               params = { suggestion_id = event.suggestion_id },
+               anchor = "s" .. event.suggestion_id
+-- 
+2.18.0
+

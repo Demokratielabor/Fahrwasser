@@ -1,0 +1,56 @@
+From 984d1af114f84d80abe064ed2311a663caf29cf6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Thomas=20S=C3=A4nger?= <thomas@gecko.space>
+Date: Thu, 23 Aug 2018 15:26:42 +0200
+Subject: [PATCH 1/2] remove 140 limit on title
+
+---
+ app/main/initiative/_action/create.lua | 5 -----
+ locale/translations.de.lua             | 2 +-
+ locale/translations.en.lua             | 2 +-
+ 3 files changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/app/main/initiative/_action/create.lua b/app/main/initiative/_action/create.lua
+index 48fd399..59bd4bf 100644
+--- a/app/main/initiative/_action/create.lua
++++ b/app/main/initiative/_action/create.lua
+@@ -77,11 +77,6 @@ if #name < 3 then
+   return false
+ end
+ 
+-if #name > 140 then
+-  slot.put_into("error", _"This title is too long!")
+-  return false
+-end
+-
+ local formatting_engine
+ if config.enforce_formatting_engine then
+   formatting_engine = config.enforce_formatting_engine
+diff --git a/locale/translations.de.lua b/locale/translations.de.lua
+index 831f790..93c478a 100644
+--- a/locale/translations.de.lua
++++ b/locale/translations.de.lua
+@@ -224,7 +224,7 @@ return {
+ ["Enter a new login name"] = "Neuen Anmeldenamen eingeben:";
+ ["Enter a new password:"] = "Neues Kennwort eingeben";
+ ["Enter a new screen name:"] = "Neuen Screen-Namen eingeben";
+-["Enter a title for your initiative (max. 140 chars):"] = "Einen Titel für die Iniative eingeben (max. 140 Zeichen)";
++["Enter a title for your initiative (max. 140 chars):"] = "Einen Titel für die Iniative eingeben";
+ ["Enter your current password:"] = "Bisheriges Kennwort eingeben:";
+ ["Enter your new password again please:"] = "Das neue Kennwort bitte nocheinmal eingeben:";
+ ["Enter your proposal and/or reasons"] = "Antrag und/oder Begründung eingeben";
+diff --git a/locale/translations.en.lua b/locale/translations.en.lua
+index 1332d9a..9ae43de 100644
+--- a/locale/translations.en.lua
++++ b/locale/translations.en.lua
+@@ -222,7 +222,7 @@ return {
+ ["Enter a new login name"] = false;
+ ["Enter a new password:"] = false;
+ ["Enter a new screen name:"] = false;
+-["Enter a title for your initiative (max. 140 chars):"] = false;
++["Enter a title for your initiative:"] = false;
+ ["Enter your current password:"] = false;
+ ["Enter your new password again please:"] = false;
+ ["Enter your proposal and/or reasons"] = false;
+-- 
+2.18.0
+

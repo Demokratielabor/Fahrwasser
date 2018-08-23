@@ -55,6 +55,9 @@ RUN apt-get update && \
 	# install lqfb-frontend
 	curl -sSL http://www.public-software-group.org/pub/projects/liquid_feedback/frontend/v${LQFB_FRONTEND_VERSION}/liquid_feedback_frontend-v${LQFB_FRONTEND_VERSION}.tar.gz | tar xzC /tmp && \
 	rsync -a /tmp/liquid_feedback_frontend-v${LQFB_FRONTEND_VERSION}/ /opt/liquid_feedback_frontend/. && \
+	cd /opt/liquid_feedback_frontend && \
+	patch -p1 < /patches/lqfb-frontend/0001-remove-140-limit-on-title.patch && \
+	patch -p1 < /patches/lqfb-frontend/0002-don-t-truncate-suggestion-names-to-avoid-a-bug-in-we.patch && \
 	# remove build-deps
 	apt-get -y purge \
 		build-essential \
