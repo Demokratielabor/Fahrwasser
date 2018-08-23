@@ -101,5 +101,5 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
     ports:
-      - 127.0.0.1:8080:8080
+      - 127.0.0.1:9001:8080
     restart: always
