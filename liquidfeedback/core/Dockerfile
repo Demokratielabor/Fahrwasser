@@ -8,6 +8,7 @@ ENV LQFB_PG_CONN "host=localhost dbname=liquid_feedback"
 RUN apk add --no-cache \
 		build-base \
 		curl \
+		libpq \
 		postgresql-dev && \
 	# install lqfb-core
 	curl -sSL http://www.public-software-group.org/pub/projects/liquid_feedback/backend/v${LQFB_CORE_VERSION}/liquid_feedback_core-v${LQFB_CORE_VERSION}.tar.gz | tar xzC /tmp && \
@@ -19,7 +20,8 @@ RUN apk add --no-cache \
 	# remove build-deps
 	apk del --no-cache \
 		build-base \
-		curl
+		curl \
+		postgresql-dev
 
 COPY entrypoint.sh /entrypoint.sh
 
