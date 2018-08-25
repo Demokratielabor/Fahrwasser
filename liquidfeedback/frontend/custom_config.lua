@@ -42,7 +42,7 @@ config.formatting_engines = {
   { id = "markdown2",
     name = "Markdown",
     executable = "markdown2",
-    args = {'-s', 'escape', '-x', 'nofollow,wiki-tables'},
+    args = {'-s', 'escape', '-x', 'nofollow,tables'},
     remove_images = true
   },
   { id = "rocketwiki",
