@@ -1,0 +1,30 @@
+From 81fa36d7fddb2a66dd24855723e781968c72e822 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Thomas=20S=C3=A4nger?= <thomas@gecko.space>
+Date: Sat, 25 Aug 2018 14:35:12 +0200
+Subject: [PATCH] unfuck CSS for em/strong in draft
+
+---
+ static/lf3.css | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/static/lf3.css b/static/lf3.css
+index f5c8d9f..c869979 100644
+--- a/static/lf3.css
++++ b/static/lf3.css
+@@ -833,11 +833,11 @@ img.micro_avatar.highlighted {
+ }
+ .main .draft b,
+ .main .draft strong {
+-  font: italic 10pt / 125% sans-serif;
++  font: bold 10pt / 125% sans-serif;
+ }
+ .main .draft i,
+ .main .draft em {
+-  font: normal 10pt / 125% sans-serif;
++  font: italic 10pt / 125% sans-serif;
+ }
+ .main form,
+ .main .form {
+-- 
+2.18.0
+
