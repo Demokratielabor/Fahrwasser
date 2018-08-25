@@ -73,7 +73,7 @@ RUN apt-get update && \
 	rm -rf /tmp/moonbridge-v${LQFB_MOONBRIDGE_VERSION} && \
 	rm -rf /tmp/webmcp-v${LQFB_WEBMCP_VERSION} && \
 	rm -rf /tmp/rocketwiki-lqfb-v${LQFB_ROCKETWIKI_VERSION} && \
-	rm -rf /tmp/liquid_feedback_frontend-v${LQFB_FRONTEND_VERSION}}
+	rm -rf /tmp/liquid_feedback_frontend-v${LQFB_FRONTEND_VERSION}
 
 COPY init.template.lua /init.template.lua
 COPY custom_config.lua /opt/liquid_feedback_frontend/config/custom_config.lua
