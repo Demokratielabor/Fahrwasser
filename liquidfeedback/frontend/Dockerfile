@@ -25,7 +25,6 @@ RUN apt-get update && \
 		libbsd-dev \
 		libghc-parsec3-dev \
 		liblua5.3-dev \
-		lsb-release \
 		lua5.3 \
 		patch \
 		postgresql-server-dev-all \
@@ -59,11 +58,12 @@ RUN apt-get update && \
 	/patches/lqfb-frontend/apply.sh && \
 	# remove build-deps
 	apt-get -y purge \
-		build-essential \
 		bmake \
+		build-essential \
 		ghc \
-		lsb-release \
 		patch \
+		python3-pip \
+		python3-setuptools \
 		rsync && \
 	apt-get -y autoremove --purge && \
 	apt-get clean && \
