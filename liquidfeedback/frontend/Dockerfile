@@ -26,6 +26,7 @@ RUN apt-get update && \
 		libghc-parsec3-dev \
 		liblua5.3-dev \
 		lua5.3 \
+		msmtp-mta \
 		patch \
 		postgresql-server-dev-all \
 		python3-pip \
@@ -73,6 +74,7 @@ RUN apt-get update && \
 	rm -rf /tmp/rocketwiki-lqfb-v${LQFB_ROCKETWIKI_VERSION} && \
 	rm -rf /tmp/liquid_feedback_frontend-v${LQFB_FRONTEND_VERSION}
 
+COPY msmtprc.template /msmtprc.template
 COPY init.template.lua /init.template.lua
 COPY custom_config.lua /opt/liquid_feedback_frontend/config/custom_config.lua
 

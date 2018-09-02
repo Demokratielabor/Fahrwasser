@@ -1,0 +1,12 @@
+defaults
+#tls on
+#tls_trust_file /etc/ssl/certs/ca-certificates.crt
+port __MAIL_PORT__
+#auth on
+aliases /etc/aliases
+
+account default
+host __MAIL_HOST__
+user __MAIL_USER__
+password __MAIL_PASSWORD__
+from __MAIL_FROM__
