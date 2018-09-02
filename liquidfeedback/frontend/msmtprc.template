@@ -1,8 +1,8 @@
 defaults
-#tls on
-#tls_trust_file /etc/ssl/certs/ca-certificates.crt
+tls on
+tls_trust_file /etc/ssl/certs/ca-certificates.crt
 port __MAIL_PORT__
-#auth on
+auth on
 aliases /etc/aliases
 
 account default
