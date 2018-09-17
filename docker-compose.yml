@@ -24,6 +24,17 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
 
+  pgbouncer-exporter:
+    build: pgbouncer-exporter
+    env_file: docker-compose.env
+    restart: always
+    depends_on:
+      - pgbouncer
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 9127:9127
+
   lqfb-core:
     build: liquidfeedback/core
     env_file: docker-compose.env
