@@ -1,0 +1,143 @@
+From 1bfe8895aace0eb6c78158d0153370f7661dfb91 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Thomas=20S=C3=A4nger?= <thomas@gecko.space>
+Date: Sat, 29 Sep 2018 14:26:08 +0200
+Subject: [PATCH] disable digests completely
+
+---
+ .../member/_action/update_notify_level.lua    | 19 +---
+ app/main/member/settings_notification.lua     | 90 -------------------
+ 2 files changed, 2 insertions(+), 107 deletions(-)
+
+diff --git a/app/main/member/_action/update_notify_level.lua b/app/main/member/_action/update_notify_level.lua
+index a8e96e6..7fa26f3 100644
+--- a/app/main/member/_action/update_notify_level.lua
++++ b/app/main/member/_action/update_notify_level.lua
+@@ -5,22 +5,7 @@ if app.session.member.disable_notifications ~= disable_notifications then
+   app.session.member.disable_notifications = disable_notifications
+ end
+ 
+-if app.session.member.disable_notifications then
+-  app.session.member.notification_dow = nil
+-  app.session.member.notification_hour = nil
+-else 
+-  if param.get("digest") == "true" then
+-    local dow = param.get("notification_dow")
+-    if dow == "daily" then
+-      app.session.member.notification_dow = nil
+-    else
+-      app.session.member.notification_dow = tonumber(dow)
+-    end
+-    app.session.member.notification_hour = tonumber(param.get("notification_hour"))
+-  else
+-    app.session.member.notification_dow = nil
+-    app.session.member.notification_hour = nil
+-  end
+-end
++app.session.member.notification_dow = nil
++app.session.member.notification_hour = nil
+ 
+ app.session.member:save()
+diff --git a/app/main/member/settings_notification.lua b/app/main/member/settings_notification.lua
+index 7afa3c2..7faa6ad 100644
+--- a/app/main/member/settings_notification.lua
++++ b/app/main/member/settings_notification.lua
+@@ -47,96 +47,6 @@ ui.form{
+           }
+         end }
+         
+-        
+-        ui.container{ attr = { class = "view_on_notify_level_all_false", style = "margin-left: 3em;" }, content = function()
+-          slot.put("<br />")
+-        
+-          ui.container{ content = _"You will receive status update notification on issue phase changes. Additionally you can subscribe for a regular digest including updates on initiative drafts and new suggestions." }
+-          slot.put("<br />")
+-          ui.container{ content = function()
+-            ui.tag{
+-              tag = "input", 
+-              attr = {
+-                id = "digest_on",
+-                type = "radio", name = "digest", value = "true",
+-                checked = (app.session.member.disable_notifications or app.session.member.notification_hour ~= nil) and "checked" or nil,
+-                onchange = [[ $(".view_on_digest_true")[this.checked ? "show" : "hide"](400) ]]
+-              }
+-            }
+-            ui.tag{
+-              tag = "label", attr = { ['for'] = "digest_on" },
+-              content = _"I want to receive a regular digest"
+-            }
+-          end }
+-            
+-          ui.container{ attr = { class = "view_on_digest_true", style = "margin-left: 4em;" }, content = function()
+- 
+-            ui.tag{ content = _"every" }
+-            slot.put(" ")
+-            ui.field.select{
+-              container_attr = { style = "display: inline-block; vertical-align: middle;" },
+-              attr = { style = "width: 10em;" },
+-              name = "notification_dow",
+-              foreign_records = {
+-                { id = "daily", name = _"day" },
+-                { id = 0, name = _"Sunday" },
+-                { id = 1, name = _"Monday" },
+-                { id = 2, name = _"Tuesday" },
+-                { id = 3, name = _"Wednesday" },
+-                { id = 4, name = _"Thursday" },
+-                { id = 5, name = _"Friday" },
+-                { id = 6, name = _"Saturday" }
+-              },
+-              foreign_id = "id",
+-              foreign_name = "name",
+-              value = app.session.member.notification_dow
+-            }
+-            
+-            slot.put(" ")
+-
+-            ui.tag{ content = _"between" }
+-            slot.put(" ")
+-            local foreign_records = {}
+-            for i = 0, 23 do
+-              foreign_records[#foreign_records+1] = {
+-                id = i,
+-                name = string.format("%02d:00 - %02d:59", i, i),
+-              }
+-            end
+-            local random_hour
+-            if app.session.member.disable_notifications or app.session.member.notification_hour == nil then
+-              random_hour = multirand.integer(0,23)
+-            end
+-            ui.field.select{
+-              container_attr = { style = "display: inline-block; vertical-align: middle;" },
+-              attr = { style = "width: 10em;" },
+-              name = "notification_hour",
+-              foreign_records = foreign_records,
+-              foreign_id = "id",
+-              foreign_name = "name",
+-              value = random_hour or app.session.member.notification_hour
+-            }
+-          end }
+-          
+-          ui.container{ content = function()
+-            ui.tag{
+-              tag = "input", 
+-              attr = {
+-                id = "digest_off",
+-                type = "radio", name = "digest", value = "false",
+-                checked = not app.session.member.disable_notifications and app.session.member.notification_dow == nil and app.session.member.notification_hour == nil and "checked" or nil,
+-                onchange = [[ $(".view_on_digest_true")[this.checked ? "hide" : "show"](400) ]]
+-              }
+-            }
+-            ui.tag{
+-              tag = "label", attr = { ['for'] = "digest_off" },
+-              content = _"don't send me a digest"
+-            }
+-          end }
+-        end }
+-        
+-        slot.put("<br />")
+-        
+         ui.container{ content = function()
+           ui.tag{
+             tag = "input", 
+-- 
+2.19.0
+
