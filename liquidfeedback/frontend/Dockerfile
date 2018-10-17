@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:stretch-slim
 
 LABEL maintainer="Thomas Sänger <thomas.saenger@demokratielabor.org>"
 
