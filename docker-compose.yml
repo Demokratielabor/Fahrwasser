@@ -73,7 +73,6 @@ services:
     restart: unless-stopped
     depends_on:
       - postgres
-      - pgbouncer
     volumes:
       - /etc/localtime:/etc/localtime:ro
     ports:
