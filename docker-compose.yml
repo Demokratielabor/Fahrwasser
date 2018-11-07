@@ -7,8 +7,6 @@ volumes:
 services:
   postgres:
     image: postgres:10-alpine
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
     env_file: docker-compose.env
     restart: always
     volumes:
@@ -17,8 +15,6 @@ services:
 
   postgres-exporter:
     image: wrouesnel/postgres_exporter
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
     env_file: docker-compose.env
     restart: always
     depends_on:
@@ -74,8 +70,6 @@ services:
 
   adminer:
     image: adminer
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
     restart: always
     depends_on:
       - postgres
@@ -85,20 +79,8 @@ services:
     ports:
       - 127.0.0.1:8080:8080
 
-  watchtower:
-    image: v2tec/watchtower
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /var/run/docker.sock:/var/run/docker.sock
-    command: --label-enable
-    restart: always
-
   node-exporter:
     image: prom/node-exporter
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /proc:/host/proc:ro
@@ -115,8 +97,6 @@ services:
 
   cadvisor:
     image: google/cadvisor
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /:/rootfs:ro
