@@ -8,7 +8,7 @@ services:
   postgres:
     image: postgres:10-alpine
     env_file: docker-compose.env
-    restart: always
+    restart: unless-stopped
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - postgres_data:/var/lib/postgresql/data
@@ -16,7 +16,7 @@ services:
   postgres-exporter:
     image: wrouesnel/postgres_exporter
     env_file: docker-compose.env
-    restart: always
+    restart: unless-stopped
     depends_on:
       - postgres
     volumes:
@@ -27,7 +27,7 @@ services:
   pgbouncer:
     build: pgbouncer
     env_file: docker-compose.env
-    restart: always
+    restart: unless-stopped
     depends_on:
       - postgres
     volumes:
@@ -36,7 +36,7 @@ services:
   pgbouncer-exporter:
     build: pgbouncer-exporter
     env_file: docker-compose.env
-    restart: always
+    restart: unless-stopped
     depends_on:
       - pgbouncer
     volumes:
@@ -47,7 +47,7 @@ services:
   lqfb-core:
     build: liquidfeedback/core
     env_file: docker-compose.env
-    restart: always
+    restart: unless-stopped
     depends_on:
       - postgres
       - pgbouncer
@@ -57,7 +57,7 @@ services:
   lqfb-frontend:
     build: liquidfeedback/frontend
     env_file: docker-compose.env
-    restart: always
+    restart: unless-stopped
     depends_on:
       - postgres
       - pgbouncer
@@ -70,7 +70,7 @@ services:
 
   adminer:
     image: adminer
-    restart: always
+    restart: unless-stopped
     depends_on:
       - postgres
       - pgbouncer
@@ -93,7 +93,7 @@ services:
       - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
     ports:
       - 9100:9100
-    restart: always
+    restart: unless-stopped
 
   cadvisor:
     image: google/cadvisor
@@ -105,4 +105,4 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
     ports:
       - 127.0.0.1:9001:8080
-    restart: always
+    restart: unless-stopped
