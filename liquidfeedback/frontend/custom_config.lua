@@ -5,12 +5,19 @@ config.instance_name = "Instance name"
 
 -- Information about service provider (HTML)
 -- ------------------------------------------------------------------------
-config.app_service_provider = "Snake Oil<br/>10000 Berlin<br/>Germany"
+config.app_service_provider = [[
+	Snake Oil<br/>
+	10000 Berlin<br/>
+	Germany
+]]
 
 
 -- A HTML formatted text the user has to accept while registering
 -- ------------------------------------------------------------------------
-config.use_terms = "<h1>Terms of Use</h1><p>Insert terms here</p>"
+config.use_terms = [[
+	<h1>Terms of Use</h1>
+	<p>Insert terms here</p>
+]]
 
 
 -- Checkbox(es) the user has to accept while registering
