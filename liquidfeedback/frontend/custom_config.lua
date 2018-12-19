@@ -51,14 +51,6 @@ config.formatting_engines = {
     executable = "markdown2",
     args = {'-s', 'escape', '-x', 'nofollow,tables,strike,break-on-newline'},
     remove_images = true
-  },
-  { id = "rocketwiki",
-    name = "RocketWiki",
-    executable = "/opt/rocketwiki-lqfb/rocketwiki-lqfb"
-  },
-  { id = "compat",
-    name = "Traditional WIKI syntax",
-    executable = "/opt/rocketwiki-lqfb/rocketwiki-lqfb-compat"
   }
 }
 

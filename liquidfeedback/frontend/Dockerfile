@@ -6,7 +6,6 @@ HEALTHCHECK CMD curl -f -L http://localhost:2812/ || exit 1
 
 ENV LQFB_MOONBRIDGE_VERSION 1.1.0
 ENV LQFB_WEBMCP_VERSION 2.1.0
-ENV LQFB_ROCKETWIKI_VERSION 0.4
 ENV LQFB_FRONTEND_VERSION 3.2.1
 
 ENV LANG C.UTF-8
@@ -20,10 +19,8 @@ RUN apt-get update && \
 		bmake \
 		build-essential \
 		curl \
-		ghc \
 		imagemagick \
 		libbsd-dev \
-		libghc-parsec3-dev \
 		liblua5.3-dev \
 		lua5.3 \
 		msmtp-mta \
@@ -46,12 +43,6 @@ RUN apt-get update && \
 	make && \
 	mkdir -p /opt/webmcp && \
 	cp -RL framework/* /opt/webmcp/ && \
-	# install rocketwiki
-	curl -sSL http://www.public-software-group.org/pub/projects/rocketwiki/liquid_feedback_edition/v${LQFB_ROCKETWIKI_VERSION}/rocketwiki-lqfb-v${LQFB_ROCKETWIKI_VERSION}.tar.gz | tar xzC /tmp && \
-	cd /tmp/rocketwiki-lqfb-v${LQFB_ROCKETWIKI_VERSION} && \
-	make && \
-	mkdir -p /opt/rocketwiki-lqfb && \
-	cp rocketwiki-lqfb rocketwiki-lqfb-compat /opt/rocketwiki-lqfb && \
 	# install lqfb-frontend
 	curl -sSL http://www.public-software-group.org/pub/projects/liquid_feedback/frontend/v${LQFB_FRONTEND_VERSION}/liquid_feedback_frontend-v${LQFB_FRONTEND_VERSION}.tar.gz | tar xzC /tmp && \
 	rsync -a /tmp/liquid_feedback_frontend-v${LQFB_FRONTEND_VERSION}/ /opt/liquid_feedback_frontend/. && \
@@ -61,7 +52,6 @@ RUN apt-get update && \
 	apt-get -y purge \
 		bmake \
 		build-essential \
-		ghc \
 		patch \
 		python3-pip \
 		python3-setuptools \
@@ -71,7 +61,6 @@ RUN apt-get update && \
 	rm -rf /var/lib/apt/lists/* && \
 	rm -rf /tmp/moonbridge-v${LQFB_MOONBRIDGE_VERSION} && \
 	rm -rf /tmp/webmcp-v${LQFB_WEBMCP_VERSION} && \
-	rm -rf /tmp/rocketwiki-lqfb-v${LQFB_ROCKETWIKI_VERSION} && \
 	rm -rf /tmp/liquid_feedback_frontend-v${LQFB_FRONTEND_VERSION}
 
 COPY msmtprc.template /msmtprc.template
