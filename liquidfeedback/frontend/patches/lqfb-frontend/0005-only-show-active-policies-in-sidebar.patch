@@ -1,0 +1,25 @@
+From ff5293fbdc520c32efa1e51cfb09c31346def710 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Thomas=20S=C3=A4nger?= <thomas@gecko.space>
+Date: Tue, 8 Jan 2019 23:08:59 +0100
+Subject: [PATCH] only show active policies in sidebar
+
+---
+ app/main/admin/index.lua | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/app/main/admin/index.lua b/app/main/admin/index.lua
+index 6e5c2f2..f0a8378 100644
+--- a/app/main/admin/index.lua
++++ b/app/main/admin/index.lua
+@@ -2,7 +2,7 @@ local inactive = param.get("inactive", atom.boolean)
+ 
+ local units = Unit:get_flattened_tree{ include_inactive = inactive }
+ 
+-local policies = Policy:build_selector{}:add_order_by("index"):exec()
++local policies = Policy:build_selector{ active = true }:add_order_by("index"):exec()
+ 
+ ui.titleAdmin()
+ 
+-- 
+2.20.1
+
