@@ -4,7 +4,7 @@ LABEL maintainer="Thomas Sänger <thomas.saenger@demokratielabor.org>"
 
 HEALTHCHECK CMD curl -f -L http://localhost:2812/ || exit 1
 
-ENV LQFB_MOONBRIDGE_VERSION 1.1.0
+ENV LQFB_MOONBRIDGE_VERSION 1.1.1
 ENV LQFB_WEBMCP_VERSION 2.1.0
 ENV LQFB_FRONTEND_VERSION 3.2.1
 
