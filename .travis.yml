@@ -9,11 +9,7 @@ services:
   - 'docker'
 
 script:
-#  - 'docker-compose -f build.yml build'
-  - 'cd pgbouncer && docker build -t demolab/fahrwasser_pgbouncer:$TRAVIS_BRANCH && cd ..'
-  - 'cd pgbouncer-exporter && docker build -t demolab/fahrwasser_pgbouncer_exporter:$TRAVIS_BRANCH && cd ..'
-  - 'cd liquidfeedback/core && docker build -t demolab/fahrwasser_lqfb_core:$TRAVIS_BRANCH && cd ../..'
-  - 'cd liquidfeedback/frontend && docker build -t demolab/fahrwasser_lqfb_frontend:$TRAVIS_BRANCH && cd ..'
+  - './.travis.sh'
 
 after_success:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
