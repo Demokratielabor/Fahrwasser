@@ -2,6 +2,7 @@ services:
   - 'docker'
 
 script:
+  - 'cp docker-compose.example.env docker-compose.env'
   - 'docker-compose build'
 
 after_success:
