@@ -4,8 +4,7 @@ services:
   - 'docker'
 
 script:
-  - 'cp docker-compose.example.env docker-compose.env'
-  - 'docker-compose build'
+  - 'docker-compose -f build.yml build'
 
 after_success:
   - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD

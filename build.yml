@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  pgbouncer:
+    image: demolab/pgbouncer
+    build: pgbouncer
+
+  pgbouncer-exporter:
+    image: demolab/pgbouncer_exporter
+    build: pgbouncer-exporter
+
+  lqfb-core:
+    image: demolab/lqfb_core
+    build: liquidfeedback/core
+
+  lqfb-frontend:
+    image: demolab/lqfb_frontend
+    build: liquidfeedback/frontend
