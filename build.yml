@@ -2,17 +2,17 @@ version: '3'
 
 services:
   pgbouncer:
-    image: demolab/pgbouncer
+    image: demolab/fahrwasser_pgbouncer:${TRAVIS_BRANCH}
     build: pgbouncer
 
   pgbouncer-exporter:
-    image: demolab/pgbouncer_exporter
+    image: demolab/fahrwasser_pgbouncer_exporter:${TRAVIS_BRANCH}
     build: pgbouncer-exporter
 
   lqfb-core:
-    image: demolab/lqfb_core
+    image: demolab/fahrwasser_lqfb_core:${TRAVIS_BRANCH}
     build: liquidfeedback/core
 
   lqfb-frontend:
-    image: demolab/lqfb_frontend
+    image: demolab/fahrwasser_lqfb_frontend:${TRAVIS_BRANCH}
     build: liquidfeedback/frontend
