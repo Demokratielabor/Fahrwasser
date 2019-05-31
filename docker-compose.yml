@@ -61,7 +61,6 @@ services:
     depends_on:
       - postgres
       - pgbouncer
-      - lqfb-core
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - lqfb_config:/opt/liquid_feedback_frontend/config
