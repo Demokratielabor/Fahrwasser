@@ -1,4 +1,4 @@
-FROM alpine:3.9
+FROM alpine:3.10
 
 LABEL maintainer="Thomas Sänger <thomas.saenger@demokratielabor.org>"
 
