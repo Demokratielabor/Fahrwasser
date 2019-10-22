@@ -1,4 +1,4 @@
-FROM python:3-alpine
+FROM python:3.7-alpine
 
 LABEL maintainer="Thomas Sänger <thomas.saenger@demokratielabor.org>"
 
