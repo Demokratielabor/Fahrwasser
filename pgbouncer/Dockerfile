@@ -4,7 +4,7 @@ LABEL maintainer="Thomas Sänger <thomas.saenger@demokratielabor.org>"
 
 HEALTHCHECK CMD pg_isready -h localhost -p 5432
 
-RUN apk add --no-cache \
+RUN adduser -D pgbouncer && apk add --no-cache \
 	pgbouncer \
 	postgresql-client
 
