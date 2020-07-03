@@ -19,8 +19,6 @@ services:
     restart: unless-stopped
     depends_on:
       - postgres
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
     ports:
       - 9187:9187
 
@@ -62,7 +60,6 @@ services:
       - postgres
       - pgbouncer
     volumes:
-      - /etc/localtime:/etc/localtime:ro
       - lqfb_config:/opt/liquid_feedback_frontend/config
     ports:
       - 127.0.0.1:2812:2812
