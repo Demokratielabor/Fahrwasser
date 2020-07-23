@@ -6,7 +6,7 @@ volumes:
 
 services:
   postgres:
-    image: postgres:10-alpine
+    image: postgres:12-alpine
     env_file: docker-compose.env
     restart: unless-stopped
     volumes:
