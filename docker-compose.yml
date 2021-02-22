@@ -14,7 +14,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   postgres-exporter:
-    image: wrouesnel/postgres_exporter
+    image: wrouesnel/postgres_exporter:latest
     env_file: docker-compose.env
     restart: unless-stopped
     depends_on:
@@ -23,7 +23,7 @@ services:
       - 9187:9187
 
   pgbouncer:
-    image: demolab/fahrwasser_pgbouncer
+    image: demolab/fahrwasser_pgbouncer:${TRAVIS_BRANCH:-dev}
     env_file: docker-compose.env
     restart: unless-stopped
     depends_on:
@@ -32,7 +32,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
 
   pgbouncer-exporter:
-    image: demolab/fahrwasser_pgbouncer_exporter
+    image: demolab/fahrwasser_pgbouncer_exporter:${TRAVIS_BRANCH:-dev}
     env_file: docker-compose.env
     restart: unless-stopped
     depends_on:
@@ -43,7 +43,7 @@ services:
       - 9127:9127
 
   lqfb-core:
-    image: demolab/fahrwasser_lqfb_core
+    image: demolab/fahrwasser_lqfb_core:${TRAVIS_BRANCH:-dev}
     env_file: docker-compose.env
     restart: unless-stopped
     depends_on:
@@ -53,7 +53,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
 
   lqfb-frontend:
-    image: demolab/fahrwasser_lqfb_frontend
+    image: demolab/fahrwasser_lqfb_frontend:${TRAVIS_BRANCH:-dev}
     env_file: docker-compose.env
     restart: unless-stopped
     depends_on:
@@ -65,7 +65,7 @@ services:
       - 127.0.0.1:2812:2812
 
   adminer:
-    image: adminer
+    image: adminer:latest
     restart: unless-stopped
     depends_on:
       - postgres
