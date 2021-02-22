@@ -1,7 +1,5 @@
 FROM alpine:3.13 AS builder
 
-LABEL maintainer="Thomas Sänger <thomas.saenger@demokratielabor.org>"
-
 ENV LQFB_CORE_VERSION 3.2.2
 
 RUN apk add --no-cache \
@@ -16,6 +14,8 @@ RUN apk add --no-cache \
 
 
 FROM alpine:3.13
+
+LABEL maintainer="Thomas Sänger <thomas.saenger@demokratielabor.org>"
 
 RUN apk add --no-cache postgresql-libs
 
