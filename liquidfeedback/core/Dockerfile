@@ -17,9 +17,7 @@ RUN apk add --no-cache \
 
 FROM alpine:3.13
 
-ENV LQFB_PG_CONN "host=localhost dbname=liquid_feedback"
-
-RUN apk add --no-cache libpq
+RUN apk add --no-cache postgresql-libs
 
 COPY --from=builder /tmp/liquid_feedback_core/lf_update /opt/liquid_feedback_core/lf_update
 COPY --from=builder /tmp/liquid_feedback_core/lf_update_issue_order /opt/liquid_feedback_core/lf_update_issue_order
