@@ -6,10 +6,10 @@ addons:
       - docker-ce
 
 services:
-  - 'docker'
+  - "docker"
 
 script:
-  - './.travis.sh'
+  - "./.travis.sh"
 
 after_success:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin

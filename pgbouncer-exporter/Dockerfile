@@ -5,14 +5,14 @@ LABEL maintainer="Thomas Sänger <thomas.saenger@demokratielabor.org>"
 HEALTHCHECK CMD curl -f -L http://localhost:9127/metrics || exit 1
 
 RUN apk add --no-cache \
-		build-base \
-		curl \
-		postgresql-dev \
-		postgresql-libs && \
+	build-base \
+	curl \
+	postgresql-dev \
+	postgresql-libs && \
 	python3 -m pip install --no-cache-dir prometheus-pgbouncer-exporter && \
 	apk del --no-cache \
-		build-base \
-		postgresql-dev
+	build-base \
+	postgresql-dev
 
 COPY pgbouncer-exporter.yml /pgbouncer-exporter.yml
 

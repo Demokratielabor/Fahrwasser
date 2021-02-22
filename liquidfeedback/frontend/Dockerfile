@@ -16,19 +16,19 @@ COPY patches /patches
 
 RUN apt-get update && \
 	apt-get -y install --no-install-recommends \
-		bmake \
-		build-essential \
-		curl \
-		imagemagick \
-		libbsd-dev \
-		liblua5.3-dev \
-		lua5.3 \
-		msmtp-mta \
-		patch \
-		postgresql-server-dev-all \
-		python3-pip \
-		python3-setuptools \
-		rsync && \
+	bmake \
+	build-essential \
+	curl \
+	imagemagick \
+	libbsd-dev \
+	liblua5.3-dev \
+	lua5.3 \
+	msmtp-mta \
+	patch \
+	postgresql-server-dev-all \
+	python3-pip \
+	python3-setuptools \
+	rsync && \
 	pip3 --no-cache-dir install markdown2 && \
 	# install moonbridge
 	curl -sSL http://www.public-software-group.org/pub/projects/moonbridge/v${LQFB_MOONBRIDGE_VERSION}/moonbridge-v${LQFB_MOONBRIDGE_VERSION}.tar.gz | tar xzC /tmp && \
@@ -50,12 +50,12 @@ RUN apt-get update && \
 	/patches/lqfb-frontend/apply.sh && \
 	# remove build-deps
 	apt-get -y purge \
-		bmake \
-		build-essential \
-		patch \
-		python3-pip \
-		python3-setuptools \
-		rsync && \
+	bmake \
+	build-essential \
+	patch \
+	python3-pip \
+	python3-setuptools \
+	rsync && \
 	apt-get -y autoremove --purge && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/* && \
