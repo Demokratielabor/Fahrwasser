@@ -17,14 +17,14 @@ RUN apt-get update && \
 	apt-get -y install --no-install-recommends \
 	build-essential\
 	liblua5.3-dev \
-	lsb-release \
 	lua5.3
 
 
 FROM clua-builder AS moonbridge-builder
 RUN apt-get -y install --no-install-recommends \
 	bmake \
-	libbsd-dev
+	libbsd-dev \
+	lsb-release
 RUN curl -sSL http://www.public-software-group.org/pub/projects/moonbridge/v${LQFB_MOONBRIDGE_VERSION}/moonbridge-v${LQFB_MOONBRIDGE_VERSION}.tar.gz | tar xzC /tmp && \
 	cd /tmp/moonbridge-v${LQFB_MOONBRIDGE_VERSION} && \
 	bmake MOONBR_LUA_PATH=/opt/moonbridge/?.lua && \
