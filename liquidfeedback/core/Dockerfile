@@ -10,7 +10,7 @@ RUN apk add --no-cache \
 	curl -sSL http://www.public-software-group.org/pub/projects/liquid_feedback/backend/v${LQFB_CORE_VERSION}/liquid_feedback_core-v${LQFB_CORE_VERSION}.tar.gz | tar xzC /tmp && \
 	ln -s /tmp/liquid_feedback_core-v${LQFB_CORE_VERSION} /tmp/liquid_feedback_core && \
 	cd /tmp/liquid_feedback_core && \
-	make -j $(nproc)
+	make
 
 
 FROM alpine:3.13
