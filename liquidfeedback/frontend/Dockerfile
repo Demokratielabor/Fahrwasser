@@ -1,8 +1,4 @@
-FROM debian:buster-slim
-
-LABEL maintainer="Thomas Sänger <thomas.saenger@demokratielabor.org>"
-
-HEALTHCHECK CMD curl -f -L http://localhost:2812/ || exit 1
+FROM debian:buster-slim AS base-builder
 
 ENV LQFB_MOONBRIDGE_VERSION 1.1.2
 ENV LQFB_WEBMCP_VERSION 2.2.0
@@ -10,58 +6,78 @@ ENV LQFB_FRONTEND_VERSION 3.2.1
 
 ENV LANG C.UTF-8
 
-VOLUME [ "/opt/liquid_feedback_frontend/config" ]
+RUN apt-get update && \
+	apt-get -y install --no-install-recommends \
+	ca-certificates \
+	curl
 
-COPY patches /patches
+
+FROM base-builder AS clua-builder
+RUN apt-get update && \
+	apt-get -y install --no-install-recommends \
+	build-essential\
+	liblua5.3-dev \
+	lsb-release \
+	lua5.3
+
+
+FROM clua-builder AS moonbridge-builder
+RUN apt-get -y install --no-install-recommends \
+	bmake \
+	libbsd-dev
+RUN curl -sSL http://www.public-software-group.org/pub/projects/moonbridge/v${LQFB_MOONBRIDGE_VERSION}/moonbridge-v${LQFB_MOONBRIDGE_VERSION}.tar.gz | tar xzC /tmp && \
+	cd /tmp/moonbridge-v${LQFB_MOONBRIDGE_VERSION} && \
+	bmake MOONBR_LUA_PATH=/opt/moonbridge/?.lua && \
+	mkdir -p /opt/moonbridge && \
+	cp moonbridge moonbridge_http.lua /opt/moonbridge/
+
+
+FROM clua-builder AS webmcp-builder
+RUN apt-get -y install --no-install-recommends \
+	patch \
+	postgresql-server-dev-all
+COPY patches/webmcp /patches
+RUN curl -sSL http://www.public-software-group.org/pub/projects/webmcp/v${LQFB_WEBMCP_VERSION}/webmcp-v${LQFB_WEBMCP_VERSION}.tar.gz | tar xzC /tmp && \
+	cd /tmp/webmcp-v${LQFB_WEBMCP_VERSION} && \
+	patch -p1 < /patches/0001-use-lua5.3.patch && \
+	make && \
+	mkdir -p /opt/webmcp && \
+	cp -RL framework/* /opt/webmcp/
+
+
+FROM base-builder AS lqfb-frontend-builder
+RUN apt-get -y install --no-install-recommends patch
+COPY patches/lqfb-frontend /patches
+RUN curl -sSL http://www.public-software-group.org/pub/projects/liquid_feedback/frontend/v${LQFB_FRONTEND_VERSION}/liquid_feedback_frontend-v${LQFB_FRONTEND_VERSION}.tar.gz | tar xzC /tmp && \
+	mv /tmp/liquid_feedback_frontend-v${LQFB_FRONTEND_VERSION} /opt/liquid_feedback_frontend && \
+	cd /opt/liquid_feedback_frontend && \
+	/patches/apply.sh
+
+
+FROM debian:buster-slim
+
+LABEL maintainer="Thomas Sänger <thomas.saenger@demokratielabor.org>"
+
+HEALTHCHECK CMD curl -f -L http://localhost:2812/ || exit 1
+
+VOLUME [ "/opt/liquid_feedback_frontend/config" ]
 
 RUN apt-get update && \
 	apt-get -y install --no-install-recommends \
-	bmake \
-	build-essential \
-	curl \
+	libbsd0 \
+	liblua5.3 \
+	libpq5 \
 	imagemagick \
-	libbsd-dev \
-	liblua5.3-dev \
-	lua5.3 \
 	msmtp-mta \
-	patch \
-	postgresql-server-dev-all \
-	python3-pip \
-	python3-setuptools \
-	rsync && \
+	python3-pip && \
 	pip3 --no-cache-dir install markdown2 && \
-	# install moonbridge
-	curl -sSL http://www.public-software-group.org/pub/projects/moonbridge/v${LQFB_MOONBRIDGE_VERSION}/moonbridge-v${LQFB_MOONBRIDGE_VERSION}.tar.gz | tar xzC /tmp && \
-	cd /tmp/moonbridge-v${LQFB_MOONBRIDGE_VERSION} && \
-	bmake -j $(nproc) MOONBR_LUA_PATH=/opt/moonbridge/?.lua && \
-	mkdir -p /opt/moonbridge && \
-	cp moonbridge moonbridge_http.lua /opt/moonbridge/ && \
-	# install webmcp
-	curl -sSL http://www.public-software-group.org/pub/projects/webmcp/v${LQFB_WEBMCP_VERSION}/webmcp-v${LQFB_WEBMCP_VERSION}.tar.gz | tar xzC /tmp && \
-	cd /tmp/webmcp-v${LQFB_WEBMCP_VERSION} && \
-	patch -p1 < /patches/webmcp/0001-use-lua5.3.patch && \
-	make && \
-	mkdir -p /opt/webmcp && \
-	cp -RL framework/* /opt/webmcp/ && \
-	# install lqfb-frontend
-	curl -sSL http://www.public-software-group.org/pub/projects/liquid_feedback/frontend/v${LQFB_FRONTEND_VERSION}/liquid_feedback_frontend-v${LQFB_FRONTEND_VERSION}.tar.gz | tar xzC /tmp && \
-	rsync -a /tmp/liquid_feedback_frontend-v${LQFB_FRONTEND_VERSION}/ /opt/liquid_feedback_frontend/. && \
-	cd /opt/liquid_feedback_frontend && \
-	/patches/lqfb-frontend/apply.sh && \
-	# remove build-deps
-	apt-get -y purge \
-	bmake \
-	build-essential \
-	patch \
-	python3-pip \
-	python3-setuptools \
-	rsync && \
 	apt-get -y autoremove --purge && \
 	apt-get clean && \
-	rm -rf /var/lib/apt/lists/* && \
-	rm -rf /tmp/moonbridge-v${LQFB_MOONBRIDGE_VERSION} && \
-	rm -rf /tmp/webmcp-v${LQFB_WEBMCP_VERSION} && \
-	rm -rf /tmp/liquid_feedback_frontend-v${LQFB_FRONTEND_VERSION}
+	rm -rf /var/lib/apt/lists/*
+
+COPY --from=moonbridge-builder /opt/moonbridge /opt/moonbridge
+COPY --from=webmcp-builder /opt/webmcp /opt/webmcp
+COPY --from=lqfb-frontend-builder /opt/liquid_feedback_frontend /opt/liquid_feedback_frontend
 
 COPY msmtprc.template /msmtprc.template
 COPY init.template.lua /init.template.lua
