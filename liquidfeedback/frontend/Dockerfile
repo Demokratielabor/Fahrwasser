@@ -64,6 +64,8 @@ VOLUME [ "/opt/liquid_feedback_frontend/config" ]
 
 RUN apt-get update && \
 	apt-get -y install --no-install-recommends \
+	ca-certificates \
+	curl \
 	libbsd0 \
 	liblua5.3 \
 	libpq5 \
