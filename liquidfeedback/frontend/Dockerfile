@@ -12,14 +12,17 @@ RUN apt-get update && \
 	curl
 
 
-FROM base-builder AS clua-builder
- RUN apt-get -y install --no-install-recommends \
-	build-essential\
+FROM base-builder AS c-builder
+RUN apt-get -y install --no-install-recommends build-essential
+
+
+FROM c-builder AS lua-builder
+RUN apt-get -y install --no-install-recommends \
 	liblua5.3-dev \
 	lua5.3
 
 
-FROM clua-builder AS moonbridge-builder
+FROM lua-builder AS moonbridge-builder
 RUN apt-get -y install --no-install-recommends \
 	bmake \
 	libbsd-dev \
@@ -31,7 +34,7 @@ RUN curl -sSL http://www.public-software-group.org/pub/projects/moonbridge/v${LQ
 	cp moonbridge moonbridge_http.lua /opt/moonbridge/
 
 
-FROM clua-builder AS webmcp-builder
+FROM lua-builder AS webmcp-builder
 RUN apt-get -y install --no-install-recommends \
 	patch \
 	postgresql-server-dev-all
