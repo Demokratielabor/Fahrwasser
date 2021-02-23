@@ -2,6 +2,7 @@ FROM debian:buster-slim AS base-builder
 
 ENV LQFB_MOONBRIDGE_VERSION 1.1.2
 ENV LQFB_WEBMCP_VERSION 2.2.0
+ENV LQFB_ROCKETWIKI_VERSION 0.4
 ENV LQFB_FRONTEND_VERSION 3.2.1
 
 ENV LANG C.UTF-8
@@ -47,6 +48,17 @@ RUN curl -sSL http://www.public-software-group.org/pub/projects/webmcp/v${LQFB_W
 	cp -RL framework/* /opt/webmcp/
 
 
+FROM c-builder AS rocketwiki-builder
+RUN apt-get -y install --no-install-recommends \
+	ghc \
+	libghc-parsec3-dev
+RUN curl -sSL http://www.public-software-group.org/pub/projects/rocketwiki/liquid_feedback_edition/v${LQFB_ROCKETWIKI_VERSION}/rocketwiki-lqfb-v${LQFB_ROCKETWIKI_VERSION}.tar.gz | tar xzC /tmp && \
+	cd /tmp/rocketwiki-lqfb-v${LQFB_ROCKETWIKI_VERSION} && \
+	make && \
+	mkdir -p /opt/rocketwiki-lqfb && \
+	cp rocketwiki-lqfb rocketwiki-lqfb-compat /opt/rocketwiki-lqfb
+
+
 FROM base-builder AS lqfb-frontend-builder
 RUN apt-get -y install --no-install-recommends patch
 COPY patches/lqfb-frontend /patches
@@ -68,6 +80,7 @@ RUN apt-get update && \
 	apt-get -y install --no-install-recommends \
 	ca-certificates \
 	curl \
+	libatomic1 \
 	libbsd0 \
 	liblua5.3 \
 	libpq5 \
@@ -81,6 +94,7 @@ RUN apt-get update && \
 
 COPY --from=moonbridge-builder /opt/moonbridge /opt/moonbridge
 COPY --from=webmcp-builder /opt/webmcp /opt/webmcp
+COPY --from=rocketwiki-builder /opt/rocketwiki-lqfb /opt/rocketwiki-lqfb
 COPY --from=lqfb-frontend-builder /opt/liquid_feedback_frontend /opt/liquid_feedback_frontend
 
 COPY msmtprc.template /msmtprc.template
