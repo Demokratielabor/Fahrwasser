@@ -13,8 +13,7 @@ RUN apt-get update && \
 
 
 FROM base-builder AS clua-builder
-RUN apt-get update && \
-	apt-get -y install --no-install-recommends \
+ RUN apt-get -y install --no-install-recommends \
 	build-essential\
 	liblua5.3-dev \
 	lua5.3
