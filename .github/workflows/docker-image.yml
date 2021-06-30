@@ -1,14 +1,12 @@
 name: Docker Image CI
 
-
 on:
   schedule:
-    - cron: '37 0 * * 1'
+    - cron: "37 0 * * 1"
   push:
 
-
 jobs:
-  build:
+  build_pgbouncer:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -17,26 +15,107 @@ jobs:
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v3.x
 
-      - name: Create folder for storing images
+      - name: Create cache folder
         run: |
           sudo mkdir -p /images
           sudo chmod 777 /images
 
-      - name: Configure images folder for caching
+      - name: Configure cache folder
         uses: actions/cache@v2
         with:
           path: /images
-          key: ${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}
+          key: ${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}-pgbouncer
 
-      - name: Build images
-        run: docker-compose -f docker-compose.build.yml build
+      - name: Build image
+        run: docker build -t demolab/fahrwasser_pgbouncer:${{ env.GITHUB_REF_SLUG }} pgbouncer
 
-      - name: Save all docker images
-        run: docker save demolab/fahrwasser_pgbouncer demolab/fahrwasser_pgbouncer_exporter demolab/fahrwasser_lqfb_core demolab/fahrwasser_lqfb_frontend -o /images/images.tar.gz
+      - name: Save image
+        run: docker save demolab/fahrwasser_pgbouncer -o /images/images.tar.gz
 
+  build_pgbouncer_exporter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Create cache folder
+        run: |
+          sudo mkdir -p /images
+          sudo chmod 777 /images
+
+      - name: Configure cache folder
+        uses: actions/cache@v2
+        with:
+          path: /images
+          key: ${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}-pgbouncer_exporter
+
+      - name: Build image
+        run: docker build -t demolab/fahrwasser_pgbouncer_exporter:${{ env.GITHUB_REF_SLUG }} pgbouncer_exporter
+
+      - name: Save image
+        run: docker save demolab/fahrwasser_pgbouncer_exporter -o /images/images.tar.gz
+
+  build_lqfb_core:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Create cache folder
+        run: |
+          sudo mkdir -p /images
+          sudo chmod 777 /images
+
+      - name: Configure cache folder
+        uses: actions/cache@v2
+        with:
+          path: /images
+          key: ${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}-lqfb_core
+
+      - name: Build image
+        run: docker build -t demolab/fahrwasser_lqfb_core:${{ env.GITHUB_REF_SLUG }} liquidfeedback/core
+
+      - name: Save image
+        run: docker save demolab/fahrwasser_lqfb_core -o /images/images.tar.gz
+
+  build_lqfb_frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Create cache folder
+        run: |
+          sudo mkdir -p /images
+          sudo chmod 777 /images
+
+      - name: Configure cache folder
+        uses: actions/cache@v2
+        with:
+          path: /images
+          key: ${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}-lqfb_frontend
+
+      - name: Build image
+        run: docker build -t demolab/fahrwasser_lqfb_frontend:${{ env.GITHUB_REF_SLUG }} liquidfeedback/frontend
+
+      - name: Save image
+        run: docker save demolab/fahrwasser_lqfb_frontend -o /images/images.tar.gz
 
   deploy:
-    needs: build
+    needs:
+      - build_pgbouncer
+      - build_pgbouncer_exporter
+      - build_lqfb_core
+      - build_lqfb_frontend
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -45,19 +124,44 @@ jobs:
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v3.x
 
-      - name: Create folder for storing images
+      - name: Create cache folders
         run: |
-          sudo mkdir -p /images
-          sudo chmod 777 /images
+          sudo mkdir -p /images/pgbouncer
+          sudo mkdir -p /images/pgbouncer_exporter
+          sudo mkdir -p /images/lqfb_core
+          sudo mkdir -p /images/lqfb_frontend
+          sudo chmod -R 777 /images
 
-      - name: Configure images folder for caching
+      - name: Configure pgbouncer cache folder
         uses: actions/cache@v2
         with:
-          path: /images
-          key: ${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}
+          path: /images/pgbouncer
+          key: ${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}-pgbouncer
+
+      - name: Configure pgbouncer_exporter cache folder
+        uses: actions/cache@v2
+        with:
+          path: /images/pgbouncer_exporter
+          key: ${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}-pgbouncer_exporter
+
+      - name: Configure lqfb_core cache folder
+        uses: actions/cache@v2
+        with:
+          path: /images/lqfb_core
+          key: ${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}-lqfb_core
+
+      - name: Configure lqfb_frontend cache folder
+        uses: actions/cache@v2
+        with:
+          path: /images/lqfb_frontend
+          key: ${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}-lqfb_frontend
 
       - name: Load docker images
-        run: docker load -i /images/images.tar.gz
+        run: |
+          docker load -i /images/pgbouncer/images.tar.gz
+          docker load -i /images/pgbouncer_exporter/images.tar.gz
+          docker load -i /images/lqfb_core/images.tar.gz
+          docker load -i /images/lqfb_frontend/images.tar.gz
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
