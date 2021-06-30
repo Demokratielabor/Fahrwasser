@@ -1,0 +1,25 @@
+name: Docker Image CI
+
+on:
+  schedule:
+    - cron: '37 0 * * 1'
+  push:
+    branches: [ latest ]
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build images
+        run: docker-compose -f docker-compose.build.yml build
+
+#      - name: Login to Docker Hub
+#        env:
+#          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+#          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+#        run: echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin
+
+#      - name: Deploy images
+#        run: docker-compose -f docker-compose.build.yml push
