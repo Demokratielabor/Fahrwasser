@@ -5,6 +5,9 @@ on:
     - cron: "37 0 * * 1"
   push:
 
+env:
+  DOCKER_BUILDKIT: 1
+
 jobs:
   build_pgbouncer:
     runs-on: ubuntu-latest
