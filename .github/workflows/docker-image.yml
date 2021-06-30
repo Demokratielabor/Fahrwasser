@@ -7,7 +7,7 @@ on:
 
 
 jobs:
-  build_and_deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -18,6 +18,16 @@ jobs:
 
       - name: Build images
         run: docker-compose -f docker-compose.build.yml build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
