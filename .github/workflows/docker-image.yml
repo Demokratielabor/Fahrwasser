@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: rlespinasse/github-slug-action@v3.x
 
       - name: Build images
         run: docker-compose -f docker-compose.build.yml build
@@ -24,5 +25,5 @@ jobs:
 
       - name: Deploy images
         env:
-          TAG_NAME: ${{ github.ref }}
+          TAG_NAME: ${{ env.GITHUB_REF_SLUG }}
         run: docker-compose -f docker-compose.build.yml push
