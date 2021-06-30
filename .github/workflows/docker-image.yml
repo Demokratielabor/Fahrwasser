@@ -53,7 +53,7 @@ jobs:
           key: ${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}-pgbouncer_exporter
 
       - name: Build image
-        run: docker build -t demolab/fahrwasser_pgbouncer_exporter:${{ env.GITHUB_REF_SLUG }} pgbouncer_exporter
+        run: docker build -t demolab/fahrwasser_pgbouncer_exporter:${{ env.GITHUB_REF_SLUG }} pgbouncer-exporter
 
       - name: Save image
         run: docker save demolab/fahrwasser_pgbouncer_exporter -o /images/images.tar.gz
