@@ -2,17 +2,17 @@ version: "3"
 
 services:
   pgbouncer:
-    image: demolab/fahrwasser_pgbouncer:${TAG_NAME:-dev}
+    image: demolab/fahrwasser_pgbouncer:${GITHUB_REF_SLUG:-dev}
     build: pgbouncer
 
   pgbouncer-exporter:
-    image: demolab/fahrwasser_pgbouncer_exporter:${TAG_NAME:-dev}
+    image: demolab/fahrwasser_pgbouncer_exporter:${GITHUB_REF_SLUG:-dev}
     build: pgbouncer-exporter
 
   lqfb-core:
-    image: demolab/fahrwasser_lqfb_core:${TAG_NAME:-dev}
+    image: demolab/fahrwasser_lqfb_core:${GITHUB_REF_SLUG:-dev}
     build: liquidfeedback/core
 
   lqfb-frontend:
-    image: demolab/fahrwasser_lqfb_frontend:${TAG_NAME:-dev}
+    image: demolab/fahrwasser_lqfb_frontend:${GITHUB_REF_SLUG:-dev}
     build: liquidfeedback/frontend
