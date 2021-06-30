@@ -1,5 +1,6 @@
 name: Docker Image CI
 
+
 on:
   schedule:
     - cron: '37 0 * * 1'
@@ -16,8 +17,23 @@ jobs:
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v3.x
 
+      - name: Create folder for storing images
+        run: |
+          sudo mkdir -p /images
+          sudo chmod 777 /images
+
+      - name: Configure images folder for caching
+        uses: actions/cache@v2
+        with:
+          path: /images
+          key: ${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}
+
       - name: Build images
         run: docker-compose -f docker-compose.build.yml build
+
+      - name: Save all docker images
+        run: docker save demolab/fahrwasser_pgbouncer demolab/fahrwasser_pgbouncer_exporter demolab/fahrwasser_lqfb_core demolab/fahrwasser_lqfb_frontend -o /images/images.tar.gz
+
 
   deploy:
     needs: build
@@ -28,6 +44,20 @@ jobs:
 
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Create folder for storing images
+        run: |
+          sudo mkdir -p /images
+          sudo chmod 777 /images
+
+      - name: Configure images folder for caching
+        uses: actions/cache@v2
+        with:
+          path: /images
+          key: ${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}
+
+      - name: Load docker images
+        run: docker load -i /images/images.tar.gz
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
