@@ -1,4 +1,4 @@
-FROM debian:buster-slim AS base-builder
+FROM debian:bullseye-slim AS base-builder
 
 ENV LQFB_MOONBRIDGE_VERSION 1.1.2
 ENV LQFB_WEBMCP_VERSION 2.2.0
@@ -68,7 +68,7 @@ RUN curl -sSL http://www.public-software-group.org/pub/projects/liquid_feedback/
 	/patches/apply.sh
 
 
-FROM debian:buster-slim
+FROM debian:bullseye-slim
 
 LABEL maintainer="Thomas Sänger <thomas.saenger@demokratielabor.org>"
 
