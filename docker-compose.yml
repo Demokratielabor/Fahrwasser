@@ -32,13 +32,3 @@ services:
       - lqfb_config:/opt/liquid_feedback_frontend/config
     ports:
       - 127.0.0.1:2812:2812
-
-  adminer:
-    image: adminer:latest
-    restart: unless-stopped
-    depends_on:
-      - postgres
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-    ports:
-      - 127.0.0.1:8080:8080
