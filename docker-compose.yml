@@ -22,33 +22,12 @@ services:
     ports:
       - 9187:9187
 
-  pgbouncer:
-    image: demolab/fahrwasser_pgbouncer:${TRAVIS_BRANCH:-latest}
-    env_file: docker-compose.env
-    restart: unless-stopped
-    depends_on:
-      - postgres
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-
-  pgbouncer-exporter:
-    image: demolab/fahrwasser_pgbouncer_exporter:${TRAVIS_BRANCH:-latest}
-    env_file: docker-compose.env
-    restart: unless-stopped
-    depends_on:
-      - pgbouncer
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-    ports:
-      - 9127:9127
-
   lqfb-core:
     image: demolab/fahrwasser_lqfb_core:${TRAVIS_BRANCH:-latest}
     env_file: docker-compose.env
     restart: unless-stopped
     depends_on:
       - postgres
-      - pgbouncer
     volumes:
       - /etc/localtime:/etc/localtime:ro
 
@@ -58,7 +37,6 @@ services:
     restart: unless-stopped
     depends_on:
       - postgres
-      - pgbouncer
     volumes:
       - lqfb_config:/opt/liquid_feedback_frontend/config
     ports:

@@ -1,14 +1,6 @@
 version: "3"
 
 services:
-  pgbouncer:
-    image: demolab/fahrwasser_pgbouncer:${GITHUB_REF_SLUG:-local}
-    build: pgbouncer
-
-  pgbouncer-exporter:
-    image: demolab/fahrwasser_pgbouncer_exporter:${GITHUB_REF_SLUG:-local}
-    build: pgbouncer-exporter
-
   lqfb-core:
     image: demolab/fahrwasser_lqfb_core:${GITHUB_REF_SLUG:-local}
     build: liquidfeedback/core

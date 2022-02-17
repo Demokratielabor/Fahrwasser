@@ -9,58 +9,6 @@ env:
   DOCKER_BUILDKIT: 1
 
 jobs:
-  build_pgbouncer:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out the repo
-        uses: actions/checkout@v2
-
-      - name: Inject slug/short variables
-        uses: rlespinasse/github-slug-action@v3.x
-
-      - name: Create folder for images
-        run: |
-          sudo mkdir -p /images
-          sudo chmod 777 /images
-
-      - name: Build image
-        run: docker build -t demolab/fahrwasser_pgbouncer:${{ env.GITHUB_REF_SLUG }} pgbouncer
-
-      - name: Save image
-        run: docker save demolab/fahrwasser_pgbouncer -o /images/pgbouncer.tar.gz
-
-      - name: Cache image
-        uses: actions/cache@v2
-        with:
-          path: /images/pgbouncer.tar.gz
-          key: ${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}-pgbouncer
-
-  build_pgbouncer_exporter:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out the repo
-        uses: actions/checkout@v2
-
-      - name: Inject slug/short variables
-        uses: rlespinasse/github-slug-action@v3.x
-
-      - name: Create folder for images
-        run: |
-          sudo mkdir -p /images
-          sudo chmod 777 /images
-
-      - name: Build image
-        run: docker build -t demolab/fahrwasser_pgbouncer_exporter:${{ env.GITHUB_REF_SLUG }} pgbouncer-exporter
-
-      - name: Save image
-        run: docker save demolab/fahrwasser_pgbouncer_exporter -o /images/pgbouncer_exporter.tar.gz
-
-      - name: Cache image
-        uses: actions/cache@v2
-        with:
-          path: /images/pgbouncer_exporter.tar.gz
-          key: ${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}-pgbouncer_exporter
-
   build_lqfb_core:
     runs-on: ubuntu-latest
     steps:
@@ -115,8 +63,6 @@ jobs:
 
   push_images:
     needs:
-      - build_pgbouncer
-      - build_pgbouncer_exporter
       - build_lqfb_core
       - build_lqfb_frontend
     runs-on: ubuntu-latest
@@ -132,18 +78,6 @@ jobs:
           sudo mkdir -p /images
           sudo chmod 777 /images
 
-      - name: Load pgbouncer cache
-        uses: actions/cache@v2
-        with:
-          path: /images/pgbouncer.tar.gz
-          key: ${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}-pgbouncer
-
-      - name: Load pgbouncer_exporter cache
-        uses: actions/cache@v2
-        with:
-          path: /images/pgbouncer_exporter.tar.gz
-          key: ${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}-pgbouncer_exporter
-
       - name: Load lqfb_core cache
         uses: actions/cache@v2
         with:
@@ -158,8 +92,6 @@ jobs:
 
       - name: Load docker images
         run: |
-          docker load -i /images/pgbouncer.tar.gz
-          docker load -i /images/pgbouncer_exporter.tar.gz
           docker load -i /images/lqfb_core.tar.gz
           docker load -i /images/lqfb_frontend.tar.gz
 
