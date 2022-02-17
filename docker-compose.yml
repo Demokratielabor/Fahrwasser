@@ -13,15 +13,6 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - postgres_data:/var/lib/postgresql/data
 
-  postgres-exporter:
-    image: wrouesnel/postgres_exporter:latest
-    env_file: docker-compose.env
-    restart: unless-stopped
-    depends_on:
-      - postgres
-    ports:
-      - 9187:9187
-
   lqfb-core:
     image: demolab/fahrwasser_lqfb_core:${TRAVIS_BRANCH:-latest}
     env_file: docker-compose.env
