@@ -1,5 +1,9 @@
 name: Docker Image CI
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
 on:
   schedule:
     - cron: "37 0 * * 1"
