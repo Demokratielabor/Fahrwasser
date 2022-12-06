@@ -38,7 +38,7 @@ jobs:
         run: docker save demolab/fahrwasser_lqfb_core -o /images/lqfb_core.tar.gz
 
       - name: Cache image
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: /images/lqfb_core.tar.gz
           key: ${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}-lqfb_core
@@ -64,7 +64,7 @@ jobs:
         run: docker save demolab/fahrwasser_lqfb_frontend -o /images/lqfb_frontend.tar.gz
 
       - name: Cache image
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: /images/lqfb_frontend.tar.gz
           key: ${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}-lqfb_frontend
@@ -87,13 +87,13 @@ jobs:
           sudo chmod 777 /images
 
       - name: Load lqfb_core cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: /images/lqfb_core.tar.gz
           key: ${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}-lqfb_core
 
       - name: Load lqfb_frontend cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: /images/lqfb_frontend.tar.gz
           key: ${{ env.GITHUB_REF_SLUG }}-${{ github.run_id }}-${{ github.run_number }}-lqfb_frontend
