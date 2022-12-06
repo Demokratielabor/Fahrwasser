@@ -8,6 +8,10 @@ on:
   schedule:
     - cron: "37 0 * * 1"
   push:
+    branches:
+      - latest
+      - main
+      - master
 
 env:
   DOCKER_BUILDKIT: 1
