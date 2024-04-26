@@ -1,4 +1,4 @@
-FROM alpine:3.17 AS builder
+FROM alpine:3.19 AS builder
 
 ENV LQFB_CORE_VERSION 3.2.2
 
@@ -13,7 +13,7 @@ RUN apk add --no-cache \
 	make
 
 
-FROM alpine:3.17
+FROM alpine:3.19
 
 LABEL maintainer="Thomas Sänger <thomas.saenger@demokratielabor.org>"
 
