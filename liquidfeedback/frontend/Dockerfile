@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim AS base-builder
+FROM debian:bookworm-slim AS base-builder
 
 ENV LQFB_MOONBRIDGE_VERSION 1.1.3
 ENV LQFB_WEBMCP_VERSION 2.2.1
@@ -30,7 +30,7 @@ RUN apt-get -y install --no-install-recommends \
 	lsb-release
 RUN curl -sSL http://www.public-software-group.org/pub/projects/moonbridge/v${LQFB_MOONBRIDGE_VERSION}/moonbridge-v${LQFB_MOONBRIDGE_VERSION}.tar.gz | tar xzC /tmp && \
 	cd /tmp/moonbridge-v${LQFB_MOONBRIDGE_VERSION} && \
-	bmake MOONBR_LUA_PATH=/opt/moonbridge/?.lua && \
+	bmake -j $(nproc) MOONBR_LUA_PATH=/opt/moonbridge/?.lua && \
 	mkdir -p /opt/moonbridge && \
 	cp moonbridge moonbridge_http.lua /opt/moonbridge/
 
@@ -39,11 +39,9 @@ FROM lua-builder AS webmcp-builder
 RUN apt-get -y install --no-install-recommends \
 	patch \
 	postgresql-server-dev-all
-COPY patches/webmcp /patches
 RUN curl -sSL http://www.public-software-group.org/pub/projects/webmcp/v${LQFB_WEBMCP_VERSION}/webmcp-v${LQFB_WEBMCP_VERSION}.tar.gz | tar xzC /tmp && \
 	cd /tmp/webmcp-v${LQFB_WEBMCP_VERSION} && \
-	patch -p1 < /patches/0001-use-lua5.3.patch && \
-	make && \
+	make -j $(nproc) && \
 	mkdir -p /opt/webmcp && \
 	cp -RL framework/* /opt/webmcp/
 
@@ -54,7 +52,7 @@ RUN apt-get -y install --no-install-recommends \
 	libghc-parsec3-dev
 RUN curl -sSL http://www.public-software-group.org/pub/projects/rocketwiki/liquid_feedback_edition/v${LQFB_ROCKETWIKI_VERSION}/rocketwiki-lqfb-v${LQFB_ROCKETWIKI_VERSION}.tar.gz | tar xzC /tmp && \
 	cd /tmp/rocketwiki-lqfb-v${LQFB_ROCKETWIKI_VERSION} && \
-	make && \
+	make -j $(nproc) && \
 	mkdir -p /opt/rocketwiki-lqfb && \
 	cp rocketwiki-lqfb rocketwiki-lqfb-compat /opt/rocketwiki-lqfb
 
@@ -68,7 +66,7 @@ RUN curl -sSL http://www.public-software-group.org/pub/projects/liquid_feedback/
 	/patches/apply.sh
 
 
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
 LABEL maintainer="Thomas Sänger <thomas.saenger@demokratielabor.org>"
 
@@ -86,8 +84,7 @@ RUN apt-get update && \
 	libpq5 \
 	imagemagick \
 	msmtp-mta \
-	python3-pip && \
-	pip3 --no-cache-dir install markdown2 && \
+	python3-markdown2 && \
 	apt-get -y autoremove --purge && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/*
