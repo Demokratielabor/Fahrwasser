@@ -1,5 +1,3 @@
-version: "3"
-
 volumes:
   postgres_data: {}
   lqfb_config: {}
@@ -14,7 +12,8 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   lqfb-core:
-    image: demolab/fahrwasser_lqfb_core:${TRAVIS_BRANCH:-latest}
+    image: demolab/fahrwasser_lqfb_core:latest
+    build: liquidfeedback/core
     env_file: docker-compose.env
     restart: unless-stopped
     depends_on:
@@ -23,7 +22,8 @@ services:
       - /etc/localtime:/etc/localtime:ro
 
   lqfb-frontend:
-    image: demolab/fahrwasser_lqfb_frontend:${TRAVIS_BRANCH:-latest}
+    image: demolab/fahrwasser_lqfb_frontend:latest
+    build: liquidfeedback/frontend
     env_file: docker-compose.env
     restart: unless-stopped
     depends_on:
