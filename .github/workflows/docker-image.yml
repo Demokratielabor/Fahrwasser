@@ -38,7 +38,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push lqfb_core
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: liquidfeedback/core
           platforms: |
@@ -50,7 +50,7 @@ jobs:
             ghcr.io/demokratielabor/fahrwasser/lqfb_core:latest
 
       - name: Build and push lqfb_frontend
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: liquidfeedback/frontend
           platforms: |
